@@ -1,0 +1,22 @@
+{% extends 'dashboard/header.html' %}}
+{% block content %}
+  <div class="container" id="search">
+  </br>
+
+    <div class="row">
+      <div class="col-sm-2"></div>
+
+      <div class="col-sm-8">
+        <form action="getData" method="get">
+        <input class="form-control" type="text" placeholder="Search" id="q" name="q" aria-label="q" required>
+
+        </form>
+      </div>
+
+      </div>
+      <div class="col-sm-2"></div>
+
+    </div>
+  </div>
+
+{% endblock %}

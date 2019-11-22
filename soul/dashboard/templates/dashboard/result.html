@@ -1,0 +1,46 @@
+{% extends 'dashboard/header.html' %}
+
+
+{% block content  %}
+
+<br>
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-sm-8">
+        <form action="getData" method="get">
+        <input class="form-control" type="text" placeholder="Search" id="q" name="q" aria-label="q">
+
+        </form>
+      </div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            {% for t in tweets %}
+
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">
+
+            <a href="https://twitter.com/{{name}}/status/{{t.id}}">
+            </a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+            {% endfor %}
+
+        </div>
+        <div class="col">
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+
+
