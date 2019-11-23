@@ -1,46 +1,63 @@
 {% extends 'dashboard/header.html' %}
-
-
 {% block content  %}
-
 <br>
-
 <div class="container">
-
-
-    <div class="row">
-        <div class="col"></div>
-        <div class="col-sm-8">
-        <form action="getData" method="get">
-        <input class="form-control" type="text" placeholder="Search" id="q" name="q" aria-label="q">
-
-        </form>
+   <div class="row">
+      <div class="col"></div>
+      <div class="col-sm-8">
+         <form action="getData" method="get">
+            <input class="form-control" type="text" placeholder="Search" id="q" value={{ search_term }} name="q" aria-label="q" required>
+            <div class="form-row">
+               <div class="form-group col-md-4">
+                  <label for="language">Language</label>
+                  <select id="language" class="form-control" name="language" >
+                     <option selected>{{ selected_lang }}</option>
+                     {% for lang in language %}
+                     <option value="{{ lang }}">{{ lang }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+               <div class="form-group col-md-4">
+                  <label for="country">Country</label>
+                  <select id="country" class="form-control" name="country">
+                     <option selected>{{ selected_country }}</option>
+                     {% for country in Country %}
+                     <option value="{{ country }}">{{ country }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+               <div class="form-group col-md-4">
+                  <label for="topic">Topic</label>
+                  <select id="topic" class="form-control" name="topic">
+                     <option selected>Choose...</option>
+                     {% for topic in topics %}
+                     <option value="{{ topic }}">{{ topic }}</option>
+                     {% endfor %}
+                  </select>
+               </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+         </form>
       </div>
-        <div class="col"></div>
-    </div>
-
-    <div class="row">
-        <div class="col"></div>
-        <div class="col">
-            {% for t in tweets %}
-
-            <blockquote class="twitter-tweet"><p lang="en" dir="ltr">
-
-            <a href="https://twitter.com/{{name}}/status/{{t.id}}">
-            </a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-            {% endfor %}
-
-        </div>
-        <div class="col">
-
-        </div>
-    </div>
-
+      <div class="col"></div>
+   </div>
+   <div id="loading">
+      <h3>Please wait...</h3>
+      <img id="loading-image" src = "/Users/srikanth/Desktop/CSE535-IR/irp4/soul/static/images/test.jpg" alt="loading" />
+   </div>
+   <div class="row">
+      <div class="col"></div>
+      <div class="col">
+         {% for t in tweets %}
+         <blockquote class="twitter-tweet">
+            <p lang="en" dir="ltr">
+               <a href="https://twitter.com/{{name}}/status/{{t.id}}">
+               </a>
+         </blockquote>
+         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+         {% endfor %}
+      </div>
+      <div class="col"></div>
+   </div>
 </div>
-
 {% endblock %}
-
-
-
-

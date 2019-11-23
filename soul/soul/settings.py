@@ -15,7 +15,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parents[1]
 
-
+MEDIA_DIR = "/Users/srikanth/Desktop/CSE535-IR/irp4/soul/media/ajax-loader.gif"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/dev/howto/deployment/checklist/
 
