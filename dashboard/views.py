@@ -9,6 +9,9 @@ from dateutil import parser
 import operator
 from django.utils.datastructures import MultiValueDictKeyError
 from django.core.paginator import Paginator
+import tweepy
+from textblob import TextBlob 
+import re
 # Create your views here.
 
 '''
@@ -21,10 +24,33 @@ def home(request):
     return render(request, 'dashboard/dashboard.html', {'name': 'Goutham','search_term':"search",'language':["English","Hindi","Portugese"],'Country':["India","USA","Brazil"]})
 
 
+# Methods for Sentimental Analysis
+def clean_tweet(tweet): 
+    ''' 
+    Utility function to clean tweet text by removing links, special characters 
+    using simple regex statements. 
+    '''
+    return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split()) 
+  
+def get_tweet_sentiment(tweet): 
+    ''' 
+    Utility function to classify sentiment of passed tweet 
+    using textblob's sentiment method 
+    '''
+    # create TextBlob object of passed tweet text 
+    analysis = TextBlob(clean_tweet(tweet)) 
+    # set sentiment 
+    if analysis.sentiment.polarity > 0: 
+        return 'positive'
+    elif analysis.sentiment.polarity == 0: 
+        return 'neutral'
+    else: 
+        return 'negative'
+
+
 search = ""
 lang = ""
 cout = ""
-
 
 def getData(request):
 
@@ -72,6 +98,7 @@ def getData(request):
     cnt2 = Counter()
     cnt3 = Counter()
     cnt4 = {"India":Counter(),"USA":Counter(),"Brazil":Counter()}
+    sentiment={}
     for d in tweets:
         v1 = d['country'][0]
         v2 = d['lang'][0]
@@ -87,6 +114,8 @@ def getData(request):
         else: cnt4["Brazil"][v4]+=0
         cnt1[v1]+=1
         cnt2[v2]+=1
+        sentiment[d['id']]=get_tweet_sentiment(d['full_text_only'][0])
+    cnt5=Counter(sentiment.values())
     tweetcount = list(cnt1.values())
 
     langcount = list(cnt2.values())
@@ -110,6 +139,12 @@ def getData(request):
     tweetdatecount["India"]=[b for a,b in k1]
     tweetdatecount["USA"]=[b for a,b in k2]
     tweetdatecount["Brazil"]=[b for a,b in k3]
+
+    sentiments=list(cnt5.keys())
+    sentimentcounts=list(cnt5.values())
+    sentimentcolormap={"neutral":"#3e95cd", "negative":"#E74C3C","positive":"#3cba9f"}
+    sentimentcolors=[sentimentcolormap[i] for i in sentiments]
+
     name = ""
 
     if len(tweets) >0:
@@ -118,12 +153,27 @@ def getData(request):
         paginator = Paginator(tweets, 20)
         page = request.GET.get('page')
         paginateTweets = paginator.get_page(page)
-    my_dict={'tweets': tweets , 'name': name,'search_term':q,'selected_lang':language,'selected_country':country,'language':["Choose..","English","Hindi","Portugese"],
-    'Country':["Choose..","India","USA","Brazil"],'countries':countries,
-    'tweetcount':tweetcount,"langs":languages,
-    "langcount":langcount,"trendhashtags":hashtags,
-    "trendhashcounts":hashtagcount,"tweetdates":tweetdates,"india_tweetdatecount":tweetdatecount["India"],
-   "usa_tweetdatecount":tweetdatecount["USA"],"brazil_tweetdatecount":tweetdatecount["Brazil"], 'paginateTweets':paginateTweets }
+    my_dict={'tweets': tweets,
+     'name': name,
+     'search_term':searchText,
+     'selected_lang':language,
+     'selected_country':country,
+     'language':["Choose..","English","Hindi","Portugese"],
+    'Country':["Choose..","India","USA","Brazil"],
+    'countries':countries,
+    'tweetcount':tweetcount,
+    "langs":languages,
+    "langcount":langcount,
+    "trendhashtags":hashtags,
+    "trendhashcounts":hashtagcount,
+    "tweetdates":tweetdates,
+    "india_tweetdatecount":tweetdatecount["India"],
+   "usa_tweetdatecount":tweetdatecount["USA"],
+   "brazil_tweetdatecount":tweetdatecount["Brazil"], 
+   'paginateTweets':paginateTweets,
+    "sentiments":sentiments,
+    "sentimentcounts":sentimentcounts,
+    "sentimentcolors":sentimentcolors }
     return render(request, 'dashboard/result.html', my_dict)
 
 

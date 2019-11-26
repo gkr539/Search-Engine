@@ -230,6 +230,40 @@ new Chart(document.getElementById("line-chart"), {
 });
 }, 1000); 
 </script>
+<br>
+  {{ sentiments|json_script:"sentiments_test" }}
+  {{ sentimentcounts|json_script:"sentimentcounts_test" }}
+  {{ sentimentcolors|json_script:"sentimentcolors_test" }}
+  <canvas id="doughnut-chart" width="500" height="350"></canvas>
+  <script id="sentiments_test" type="application/json">{"hello": "world"}</script>
+  <script id="sentimentcounts_test" type="application/json">{"hello": "world"}</script>
+  <script id="sentimentcolors_test" type="application/json">{"hello": "world"}</script>
+ <script>
+  setTimeout(function(){
+        var sentiments = JSON.parse(document.getElementById('sentiments_test').textContent);
+        var sentimentcounts = JSON.parse(document.getElementById('sentimentcounts_test').textContent);
+        var sentimentcolors = JSON.parse(document.getElementById('sentimentcolors_test').textContent);
+new Chart(document.getElementById("doughnut-chart"), {
+    type: 'doughnut',
+    data: {
+      labels: sentiments,
+      datasets: [
+        {
+          label: "Tweets",
+          backgroundColor: sentimentcolors,
+          data: sentimentcounts
+        }
+      ]
+    },
+    options: {
+      title: {
+        display: true,
+        text: 'Sentiment Analysis'
+      }
+    }
+});
+}, 1000); 
+</script> 
 </div>
 </div>
 </body>
