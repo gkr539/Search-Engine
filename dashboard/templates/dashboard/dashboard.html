@@ -8,6 +8,7 @@
          <form action="getData" method="get">
 
             <input class="form-control" type="text" placeholder="Search" id="q" name="q" aria-label="q" required>
+
             <div class="form-row">
                <div class="form-group col-md-4">
                   <label for="language">Language</label>
@@ -18,6 +19,7 @@
                      {% endfor %}
                   </select>
                </div>
+
                <div class="form-group col-md-4">
                   <label for="country">Country</label>
                   <select id="country" class="form-control" name="country">
@@ -36,6 +38,7 @@
                      {% endfor %}
                   </select>
                </div>
+
             </div>
             <button type="submit" class="btn btn-primary">Search</button>
          </form>

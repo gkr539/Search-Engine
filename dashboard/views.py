@@ -85,7 +85,7 @@ def getData(request):
     else:
         lang_filter=""
 
-    if country in ['India','USA','Brazil']:
+    if country in ['India', 'USA', 'Brazil']:
         country_filter='%20AND%20'+'country%3A('+country+')'
     else:
         country_filter="Choose..."
@@ -146,13 +146,18 @@ def getData(request):
     sentimentcolors=[sentimentcolormap[i] for i in sentiments]
 
     name = ""
-
-    if len(tweets) >0:
+    tweet_status = False
+    paginator = Paginator(tweets, 20)
+    page = request.GET.get('page')
+    paginateTweets = paginator.get_page(page)
+    if len(tweets) > 0 :
+        tweet_status = True
         name = tweets[0]['user.screen_name'][0]
 
         paginator = Paginator(tweets, 20)
         page = request.GET.get('page')
         paginateTweets = paginator.get_page(page)
+
     my_dict={'tweets': tweets,
      'name': name,
      'search_term':searchText,
@@ -173,7 +178,9 @@ def getData(request):
    'paginateTweets':paginateTweets,
     "sentiments":sentiments,
     "sentimentcounts":sentimentcounts,
-    "sentimentcolors":sentimentcolors }
+    "sentimentcolors":sentimentcolors,
+    'tweet_status': tweet_status}
+
     return render(request, 'dashboard/result.html', my_dict)
 
 
