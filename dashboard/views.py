@@ -21,7 +21,7 @@ def home(request):
 
 
 def home(request):
-    return render(request, 'dashboard/dashboard.html', {'name': 'Goutham','search_term':"search",'language':["English","Hindi","Portugese"],'Country':["India","USA","Brazil"]})
+    return render(request, 'dashboard/dashboard.html', {'name': 'Goutham','search_term':"search",'language':["English","Hindi","Portugese"],'Country':["India","USA","Brazil"],"ver_statuses":["Yes","No"]})
 
 
 # Methods for Sentimental Analysis
@@ -58,6 +58,7 @@ def getData(request):
         searchText = request.GET['q']
         language = request.GET['language']
         country = request.GET['country']
+        ver_status = request.GET['ver_status']
         search = searchText
         lang = language
         cout = country
@@ -79,7 +80,7 @@ def getData(request):
             lang=code
             break
         else:
-            lang="Choose.."
+            lang="Any"
     if lang in ['en','hi','pt']:
         lang_filter='%20AND%20'+'lang%3A('+lang+')'
     else:
@@ -88,9 +89,17 @@ def getData(request):
     if country in ['India', 'USA', 'Brazil']:
         country_filter='%20AND%20'+'country%3A('+country+')'
     else:
-        country_filter="Choose..."
+        country_filter=""
+
+    if ver_status == "Yes" :
+        ver_status_filter='%20AND%20'+'verified%3A(true)'
+    elif ver_status == "No" :
+        ver_status_filter='%20AND%20'+'verified%3A(false)'
+    else:
+        ver_status_filter=""
     #place=quote(place)
-    url = 'http://18.223.109.186:8983/solr/IRF19P1/select?q=(text_en%3A('+q+')%20OR%20'+'text_hi%3A('+q+')%20OR%20'+'text_pt%3A('+q+')%20OR%20'+'full_text%3A('+q+'))'+lang_filter+country_filter+'&wt=json&indent=true&rows=500'
+    url = 'http://18.223.109.186:8983/solr/IRF19P1/select?q=(text_en%3A('+q+')%20OR%20'+'text_hi%3A('+q+')%20OR%20'+'text_pt%3A('+q+')%20OR%20'+'full_text%3A('+q+'))'+lang_filter+country_filter+ver_status_filter+'&wt=json&indent=true&rows=500'
+    print(url)
     data = urlopen(url)
     tweets = json.load(data)['response']['docs']
     cnt = Counter()
@@ -158,28 +167,36 @@ def getData(request):
         page = request.GET.get('page')
         paginateTweets = paginator.get_page(page)
 
+    langauge_options=["Any","English","Hindi","Portugese"]
+    country_options=["Any","India","USA","Brazil"]
+    ver_status_options=["Any","Yes","No"]
+    langauge_options.remove(language)
+    country_options.remove(country)
+    ver_status_options.remove(ver_status)
     my_dict={'tweets': tweets,
-     'name': name,
-     'search_term':searchText,
-     'selected_lang':language,
-     'selected_country':country,
-     'language':["Choose..","English","Hindi","Portugese"],
-    'Country':["Choose..","India","USA","Brazil"],
-    'countries':countries,
-    'tweetcount':tweetcount,
-    "langs":languages,
-    "langcount":langcount,
-    "trendhashtags":hashtags,
-    "trendhashcounts":hashtagcount,
-    "tweetdates":tweetdates,
-    "india_tweetdatecount":tweetdatecount["India"],
-   "usa_tweetdatecount":tweetdatecount["USA"],
-   "brazil_tweetdatecount":tweetdatecount["Brazil"], 
-   'paginateTweets':paginateTweets,
-    "sentiments":sentiments,
-    "sentimentcounts":sentimentcounts,
-    "sentimentcolors":sentimentcolors,
-    'tweet_status': tweet_status}
+             'name': name,
+             'search_term':searchText,
+             'selected_lang':language,
+             'selected_country':country,
+             "selected_ver_status":ver_status,
+             'language':langauge_options,
+             'Country':country_options,
+             "ver_statuses":ver_status_options,
+             'countries':countries,
+             'tweetcount':tweetcount,
+             "langs":languages,
+             "langcount":langcount,
+             "trendhashtags":hashtags,
+             "trendhashcounts":hashtagcount,
+             "tweetdates":tweetdates,
+             "india_tweetdatecount":tweetdatecount["India"],
+             "usa_tweetdatecount":tweetdatecount["USA"],
+             "brazil_tweetdatecount":tweetdatecount["Brazil"], 
+             'paginateTweets':paginateTweets,
+             "sentiments":sentiments,
+             "sentimentcounts":sentimentcounts,
+             "sentimentcolors":sentimentcolors,
+             'tweet_status': tweet_status }
 
     return render(request, 'dashboard/result.html', my_dict)
 
