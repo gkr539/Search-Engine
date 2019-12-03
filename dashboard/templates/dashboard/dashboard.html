@@ -12,7 +12,7 @@
                <div class="form-group col-md-4">
                   <label for="language">Language</label>
                   <select id="language" class="form-control" name="language" >
-                     <option selected>Choose...</option>
+                     <option selected>Any</option>
                      {% for lang in language %}
                      <option value="{{ lang }}">{{ lang }}</option>
                      {% endfor %}
@@ -21,18 +21,18 @@
                <div class="form-group col-md-4">
                   <label for="country">Country</label>
                   <select id="country" class="form-control" name="country">
-                     <option selected>Choose...</option>
+                     <option selected>Any</option>
                      {% for country in Country %}
                      <option value="{{ country }}">{{ country }}</option>
                      {% endfor %}
                   </select>
                </div>
                <div class="form-group col-md-4">
-                  <label for="topic">Topic</label>
-                  <select id="topic" class="form-control" name="topic">
-                     <option selected>Choose...</option>
-                     {% for topic in topics %}
-                     <option value="{{ topic }}">{{ topic }}</option>
+                  <label for="ver_status">Verified user</label>
+                  <select id="ver_status" class="form-control" name="ver_status">
+                     <option selected>Any</option>
+                     {% for ver_status in ver_statuses %}
+                     <option value="{{ ver_status }}">{{ ver_status }}</option>
                      {% endfor %}
                   </select>
                </div>

@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<style>
+</style>
 </head>
-<body>
+<br>
 <br>
 <div class="container">
    <div class="row">
@@ -35,11 +37,11 @@
                   </select>
                </div>
                <div class="form-group col-md-4">
-                  <label for="topic">Topic</label>
-                  <select id="topic" class="form-control" name="topic">
-                     <option selected>Choose...</option>
-                     {% for topic in topics %}
-                     <option value="{{ topic }}">{{ topic }}</option>
+                  <label for="ver_status">Verified user</label>
+                  <select id="ver_status" class="form-control" name="ver_status">
+                     <option selected>{{ selected_ver_status }}</option>
+                     {% for ver_status in ver_statuses %}
+                     <option value="{{ ver_status }}">{{ ver_status }}</option>
                      {% endfor %}
                   </select>
                </div>
@@ -51,6 +53,11 @@
    </div>
    <div/>
    </div>
+
+{% if tweet_status %}
+
+
+
     <div class="row">
       <div class="col">
          {% for t in paginateTweets %}
@@ -60,6 +67,9 @@
                </a>
          </blockquote>
          <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
          {% endfor %}
           <div>
 
@@ -115,8 +125,8 @@
       }
     }
 });
-}, 1000); 
-   </script>   
+}, 1000);
+   </script>
  <br>
   {{ langs|json_script:"lang_test" }}
   {{ langcount|json_script:"langcount_test" }}
@@ -148,8 +158,8 @@
               }
             }
         });
-}, 1000); 
-   </script> 
+}, 1000);
+   </script>
 <br>
   {{ trendhashtags|json_script:"hashtag_test" }}
   {{ trendhashcounts|json_script:"hashcount_test" }}
@@ -181,8 +191,8 @@
         }
       }
   });
-}, 1000); 
-   </script> 
+}, 1000);
+   </script>
 <br>
   {{ tweetdates|json_script:"dates_test" }}
   {{ india_tweetdatecount|json_script:"indiacount_test" }}
@@ -203,17 +213,17 @@ new Chart(document.getElementById("line-chart"), {
   type: 'line',
   data: {
     labels: tweetdates,
-    datasets: [{ 
+    datasets: [{
         data: india_tweetdatecount,
         label: "India",
         borderColor: "#3e95cd",
         fill: false
-      }, { 
+      }, {
         data: usa_tweetdatecount,
         label: "USA",
         borderColor: "#8e5ea2",
         fill: false
-      }, { 
+      }, {
         data: brazil_tweetdatecount,
         label: "Brazil",
         borderColor: "#FA8072",
@@ -228,7 +238,7 @@ new Chart(document.getElementById("line-chart"), {
     }
   }
 });
-}, 1000); 
+}, 1000);
 </script>
 <br>
   {{ sentiments|json_script:"sentiments_test" }}
@@ -265,7 +275,19 @@ new Chart(document.getElementById("doughnut-chart"), {
 }, 1000); 
 </script> 
 </div>
+
+
 </div>
+
+
+ {% else %}
+
+    </br>
+    No results containing all your search terms were found.
+    </br>
+    Your search - {{ search_term }} - did not match any documents.
+
+{% endif %}
 </body>
 
 {% endblock %}
