@@ -51,6 +51,7 @@ def get_tweet_sentiment(tweet):
 search = ""
 lang = ""
 cout = ""
+ver = ""
 
 def getData(request):
 
@@ -62,10 +63,12 @@ def getData(request):
         search = searchText
         lang = language
         cout = country
+        ver = ver_status
     except MultiValueDictKeyError:
         searchText = search
         language = lang
         country = cout
+        ver_status = ver
     q = quote(searchText)
     language=quote(language)
     langdict = defaultdict(lambda : 'undefined')
@@ -101,7 +104,10 @@ def getData(request):
     url = 'http://18.223.109.186:8983/solr/IRF19P1/select?q=(text_en%3A('+q+')%20OR%20'+'text_hi%3A('+q+')%20OR%20'+'text_pt%3A('+q+')%20OR%20'+'full_text%3A('+q+'))'+lang_filter+country_filter+ver_status_filter+'&wt=json&indent=true&rows=500'
     print(url)
     data = urlopen(url)
-    tweets = json.load(data)['response']['docs']
+    response = json.load(data)['response']
+    tweets = response['docs']
+    countOfTweets=response['numFound']
+    print(countOfTweets)
     cnt = Counter()
     cnt1 = Counter()
     cnt2 = Counter()
@@ -196,7 +202,8 @@ def getData(request):
              "sentiments":sentiments,
              "sentimentcounts":sentimentcounts,
              "sentimentcolors":sentimentcolors,
-             'tweet_status': tweet_status }
+             'tweet_status': tweet_status,
+             'countOfTweets': countOfTweets }
 
     return render(request, 'dashboard/result.html', my_dict)
 
