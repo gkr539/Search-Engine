@@ -165,7 +165,7 @@ def getData(request):
     paginator = Paginator(tweets, 20)
     page = request.GET.get('page')
     paginateTweets = paginator.get_page(page)
-    if len(tweets) > 0 :
+    if countOfTweets > 0 :
         tweet_status = True
         name = tweets[0]['user.screen_name'][0]
 

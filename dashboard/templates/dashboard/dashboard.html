@@ -6,7 +6,7 @@
          padding: 50px;
              margin: 0;
     position: absolute;
-    top: 50%;
+    top: 35%;
     left: 50%;
     margin-right: -50%;
     transform: translate(-50%, -50%)
@@ -25,6 +25,7 @@
             <button type="submit" class="btn btn-primary"style=" display: inline-block; background-color: #3cba9f;border: none;color: #1c1c1c;width: 100%;font-size: 17px;">Search</button>
           </div>
         </div>
+     </br>
             <div class="form-row" style="width: 85%;margin-left: 100px">
                <div class="form-group col-md-4">
                   <label for="language">Language</label>
@@ -46,7 +47,7 @@
                   </select>
                </div>
                <div class="form-group col-md-4">
-                  <label for="ver_status">Verified user</label>
+                  <label for="ver_status">Verified</label>
                   <select id="ver_status" class="form-control" name="ver_status">
                      <option selected>Any</option>
                      {% for ver_status in ver_statuses %}
